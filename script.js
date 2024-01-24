@@ -1,8 +1,3 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getDatabase, ref, set } from "firebase/database";
-
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyB7Y822i_HD-GO_YdmK-VPouMZ5phJWvc0",
@@ -15,11 +10,11 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const app = firebase.initializeApp(firebaseConfig);
+const analytics = firebase.analytics();
 
 // Reference to Firebase Realtime Database
-const database = getDatabase(app);
+const database = firebase.database();
 
 // Function to show confirmation pop-up
 function showConfirmation(cell) {
@@ -41,10 +36,10 @@ function loadVotingStatusRealTime() {
         const voteCell = row.cells[4];
         const nationalID = row.cells[0].textContent;
 
-        const votingStatusRef = ref(database, `votingStatus/${nationalID}`);
+        const votingStatusRef = firebase.database().ref(`votingStatus/${nationalID}`);
 
         // Use onValue to listen for changes in the database in real-time
-        onValue(votingStatusRef, (snapshot) => {
+        firebase.database().onValue(votingStatusRef, (snapshot) => {
             const votingStatus = snapshot.val();
             if (votingStatus === "voted") {
                 // Show the check mark with fade-in effect
@@ -63,5 +58,5 @@ function loadVotingStatusRealTime() {
 
 // Function to save voting status to Firebase
 function saveVotingStatus(nationalID, status) {
-    set(ref(database, `votingStatus/${nationalID}`), status);
+    firebase.database().ref(`votingStatus/${nationalID}`).set(status);
 }
