@@ -30,11 +30,11 @@ th, td {
 }
 
 .vote-yes {
-    color: #008000; /* Green color for the check mark */
+    color: #008000;
     opacity: 1;
-    transition: opacity 0.5s ease; /* Add fade-in effect */
+    transition: opacity 0.5s ease;
 }
 
 .vote-no {
-    color: #ff0000; /* Red color for any other symbol */
+    color: #000000;
 }
