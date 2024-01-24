@@ -1,62 +1,23 @@
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyB7Y822i_HD-GO_YdmK-VPouMZ5phJWvc0",
-    authDomain: "yoosuf2024.firebaseapp.com",
-    projectId: "yoosuf2024",
-    storageBucket: "yoosuf2024.appspot.com",
-    messagingSenderId: "338569236561",
-    appId: "1:338569236561:web:97d73f4a6d1ef9bcf76870",
-    measurementId: "G-7CJL895KBC"
-};
+// Password check
+const enteredPassword = prompt("Enter the password to access the portal:");
 
-// Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const analytics = firebase.analytics();
+if (enteredPassword === "X4iyP") {
+    document.getElementById("votersTable").classList.remove("hidden");
 
-// Reference to Firebase Realtime Database
-const database = firebase.database();
+    loadVotingStatusRealTime();
+} else {
+    alert("Incorrect password. You do not have permission to access the portal.");
+    document.getElementById("votersTable").classList.add("hidden");
+}
 
-// Function to show confirmation pop-up
 function showConfirmation(cell) {
-    // Assuming you want to save the voting status to Firebase when clicked
-    const nationalID = cell.parentNode.cells[0].textContent;
-    saveVotingStatus(nationalID, "voted");
-
-    // Show the check mark with fade-in effect
-    cell.innerHTML = "&#10004;";
-    setTimeout(() => {
+    const confirmation = window.confirm("Have they voted?");
+    
+    if (confirmation) {
+        cell.innerHTML = "&#10004;";
         cell.classList.add("vote-yes");
-    }, 10);
-}
-
-// Function to load voting status from Firebase and set up real-time syncing
-function loadVotingStatusRealTime() {
-    const table = document.getElementById("votersTable");
-    for (let row of table.rows) {
-        const voteCell = row.cells[4];
-        const nationalID = row.cells[0].textContent;
-
-        const votingStatusRef = firebase.database().ref(`votingStatus/${nationalID}`);
-
-        // Use onValue to listen for changes in the database in real-time
-        firebase.database().onValue(votingStatusRef, (snapshot) => {
-            const votingStatus = snapshot.val();
-            if (votingStatus === "voted") {
-                // Show the check mark with fade-in effect
-                voteCell.innerHTML = "&#10004;";
-                setTimeout(() => {
-                    voteCell.classList.add("vote-yes");
-                }, 10);
-            } else {
-                // Clear the content and remove the class
-                voteCell.innerHTML = "";
-                voteCell.classList.remove("vote-yes", "vote-no");
-            }
-        });
+        cell.classList.remove("vote-no"); 
+    } else {
+        cell.innerHTML = ""; // Clear the content
+        cell.classList.remove("vote-yes", "vote-no");
     }
-}
-
-// Function to save voting status to Firebase
-function saveVotingStatus(nationalID, status) {
-    firebase.database().ref(`votingStatus/${nationalID}`).set(status);
-}
