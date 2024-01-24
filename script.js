@@ -1,4 +1,3 @@
-// Password check
 const enteredPassword = prompt("Enter the password to access the portal:");
 
 if (enteredPassword === "X4iyP") {
